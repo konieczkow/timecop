@@ -64,7 +64,7 @@ module DateTimeParseScenarios
     assert_equal DateTime.parse("2008-09-01T15:00:00"), DateTime.parse('15:00:00')
   end
 
-  def test_date_time_parse_time_only_hour_minute
+  def test_date_time_parse_hhmm_uses_frozen_date_not_real_clock
     future = Time.now_without_mock_time.utc + (40 * 60 * 60)
     Timecop.freeze(future) do
       expected = DateTime.new(future.year, future.month, future.day, 1, 0, 0, 0)
@@ -72,7 +72,7 @@ module DateTimeParseScenarios
     end
   end
 
-  def test_date_time_parse_time_without_seconds
+  def test_date_time_parse_hhmm_format_returns_correct_time
     assert_equal DateTime.new(2008, 9, 1, 0, 0, 0), DateTime.parse('00:00')
     assert_equal DateTime.new(2008, 9, 1, 1, 0, 0), DateTime.parse('01:00')
     assert_equal DateTime.new(2008, 9, 1, 12, 30, 0), DateTime.parse('12:30')
