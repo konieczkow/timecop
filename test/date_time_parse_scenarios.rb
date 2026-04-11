@@ -65,9 +65,12 @@ module DateTimeParseScenarios
   end
 
   def test_date_time_parse_hhmm_uses_frozen_date_not_real_clock
-    future = Time.now_without_mock_time.utc + (40 * 60 * 60)
-    Timecop.freeze(future) do
-      expected = DateTime.new(future.year, future.month, future.day, 1, 0, 0, 0)
+    real_now = Time.now_without_mock_time.utc
+    offset = 12 * 3600 + 30
+    freeze_time = real_now.hour >= 12 ? real_now - offset : real_now + offset
+
+    Timecop.freeze(freeze_time) do
+      expected = DateTime.new(freeze_time.year, freeze_time.month, freeze_time.day, 1, 0, 0, 0)
       assert_equal expected, DateTime.parse('01:00')
     end
   end
